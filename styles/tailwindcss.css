@@ -2,12 +2,34 @@
 @tailwind components;
 @tailwind utilities;
 
-
-
 /* My styles */
 
-#launch-button, #read-more-button {
-    border-radius: 5px;
-    padding: 3px 5px 3px 5px;
+#launch-button,
+#read-more-button {
+  border-radius: 5px;
+  padding: 3px 5px 3px 5px;
 }
 
+#paragraph {
+  font-size: 1.2rem;
+  line-height: 1.5;
+  text-align: justify;
+  width: 100%;
+}
+
+#editable {
+  max-width: 100%;
+  min-height: 60px;
+  overflow-y: auto;
+  text-wrap: wrap;
+  white-space: pre-wrap;
+}
+
+@media screen and (min-width: 640px) {
+  #editable {
+    min-height: 100px;
+    max-width: 100%;
+    text-wrap: wrap;
+    white-space: pre-wrap;
+  }
+}
