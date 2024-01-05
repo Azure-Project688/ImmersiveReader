@@ -22,13 +22,21 @@
             <div
               class="w-16 h-16 sm:mr-8 sm:mb-0 mb-4 inline-flex items-center justify-center rounded-full bg-green-100 text-green-500 flex-shrink-0"
             >
-              <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-10 h-10" viewBox="0 0 24 24">
-              <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path>
-              <circle cx="12" cy="7" r="4"></circle>
-            </svg>
+              <svg
+                fill="none"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                class="w-10 h-10"
+                viewBox="0 0 24 24"
+              >
+                <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
             </div>
             <div class="flex-grow sm:w-full">
-              <h2 class="text-gray-900 text-lg title-font font-medium mb-3">
+              <h2 class="text-gray-900 text-lg title-font font-medium mb-3" id="ir-title">
                 Input Window
               </h2>
               <hr class="mb-3" />
@@ -37,7 +45,7 @@
                 contenteditable="true"
                 id="editable"
               ></div>
-
+              
               <a
                 id="launch-button"
                 class="mt-3 text-green-500 inline-flex items-center hover:bg-green-500 hover:text-white"
@@ -62,5 +70,75 @@
     </section>
 
     <%- include('footer'); %>
+    <script src="https://cdn.jsdelivr.net/npm/promise-polyfill@8/dist/polyfill.min.js"></script>
+    <script src="https://ircdname.azureedge.net/immersivereadersdk/immersive-reader-sdk.1.4.0.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+      function getTokenAndSubdomainAsync() {
+        return new Promise(function (resolve, reject) {
+          $.ajax({
+            url: "/GetTokenAndSubdomain",
+            type: "GET",
+            success: function (data) {
+              if (data.error) {
+                reject(data.error);
+              } else {
+                resolve(data);
+              }
+            },
+            error: function (err) {
+              reject(err);
+            },
+          });
+        });
+      }
+
+      document.getElementById("launch-button").onclick = function () {
+        handleLaunchImmersiveReader();
+      };
+
+      function handleLaunchImmersiveReader() {
+        getTokenAndSubdomainAsync()
+          .then(function (response) {
+            const token = response["token"];
+            const subdomain = response["subdomain"];
+            // Learn more about chunk usage and supported MIME types https://learn.microsoft.com/azure/ai-services/immersive-reader/reference#chunk
+            const data = {
+              title: $("#ir-title").text(),
+              chunks: [
+                {
+                  content: $("#editable").html(),
+                  mimeType: "text/html",
+                },
+              ],
+            };
+            // Learn more about options https://learn.microsoft.com/azure/ai-services/immersive-reader/reference#options
+            const options = {
+              onExit: exitCallback,
+              uiZIndex: 2000,
+            };
+            ImmersiveReader.launchAsync(token, subdomain, data, options).catch(
+              function (error) {
+                alert(
+                  "Error in launching the Immersive Reader. Check the console."
+                );
+                console.log(error);
+              }
+            );
+          })
+          .catch(function (error) {
+            alert(
+              "Error in getting the Immersive Reader token and subdomain. Check the console."
+            );
+            console.log(error);
+          });
+      }
+
+      function exitCallback() {
+        console.log(
+          "This is the callback function. It is executed when the Immersive Reader closes."
+        );
+      }
+    </script>
   </body>
 </html>
