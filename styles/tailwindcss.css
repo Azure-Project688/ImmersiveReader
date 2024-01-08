@@ -25,6 +25,11 @@
   white-space: pre-wrap;
 }
 
+
+.profile-img {
+  width: 150px;
+  height: 150px;
+}
 @media screen and (min-width: 640px) {
   #editable {
     min-height: 100px;

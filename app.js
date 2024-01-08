@@ -56,9 +56,10 @@ app.get('/GetTokenAndSubdomain', function(req, res) {
             resource: 'https://cognitiveservices.azure.com/'
         };
         var url = `https://login.windows.net/${process.env.TENANT_ID}/oauth2/token`
-        console.log(qs.stringify(data));
+        // console.log(qs.stringify(data));
         axios.post(url, qs.stringify(data), config)
         .then(function (response) {
+            console.log(response.data);
             var token = response.data.access_token;
             var subdomain = process.env.SUBDOMAIN;
             return res.send({token, subdomain});
