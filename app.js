@@ -17,8 +17,8 @@ app.use("/assets",express.static('assets'));
 
 
 // App listen 
-app.listen(3000, () => {
-    console.log('App running on port 3000');
+app.listen(process.env.PORT || 8000, () => {
+    console.log('App running on port 8000');
 })
 
 
