@@ -29,7 +29,7 @@ It will Provide 4 variables which should be used as environment variables
     - PORT (default 8000 or port for running the app)
 
 ## For Docker platform 
-- Copy and paste the below command with your respective environment varaibles
+- Copy and paste the below command with your respective environment variables
     - `docker run -d \
         -e TENANT_ID=your_tenant_id \
         -e CLIENT_ID=your_client_id \
