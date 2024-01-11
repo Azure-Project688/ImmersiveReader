@@ -1,5 +1,5 @@
 #base Image
-FROM node:18.19.0-alpine
+FROM node:18.16.0-alpine
 # create working directory
 WORKDIR /app
 # copy files to /app
