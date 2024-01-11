@@ -13,21 +13,11 @@ app.set("views", path.join(__dirname, "views"));
 
 app.use("/assets",express.static('assets'));
 app.use(cors());
-// app.get('/', (req, res) => {
-//     res.render('index',);
-// })
-
 
 // App listen 
 app.listen(process.env.PORT || 8000, () => {
     console.log('App running on port 8000');
 })
-
-
-
-
-
-//  Added Code
 
 /* GET home page. */
 app.get('/', (req, res) => {
@@ -77,4 +67,3 @@ app.get('/GetTokenAndSubdomain', function(req, res) {
     }
 });
 
-// module.exports = app;
