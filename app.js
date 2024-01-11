@@ -4,13 +4,15 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const dotenv = require('dotenv');
+const cors = require('cors');
+
 dotenv.config();
 // Setting view engine
 app.set('view engine', 'ejs');
 app.set("views", path.join(__dirname, "views"));
 
 app.use("/assets",express.static('assets'));
-
+app.use(cors());
 // app.get('/', (req, res) => {
 //     res.render('index',);
 // })
@@ -59,7 +61,7 @@ app.get('/GetTokenAndSubdomain', function(req, res) {
         // console.log(qs.stringify(data));
         axios.post(url, qs.stringify(data), config)
         .then(function (response) {
-            console.log(response.data);
+            // console.log(response.data);
             var token = response.data.access_token;
             var subdomain = process.env.SUBDOMAIN;
             return res.send({token, subdomain});
