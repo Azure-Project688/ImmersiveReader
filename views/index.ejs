@@ -51,10 +51,10 @@
 
               <a
                 id="launch-button"
-                class="mt-3 text-green-500 inline-flex items-center hover:bg-green-500 hover:text-white"
+                class="mt-3 text-green-500 bg-yellow-200 inline-flex items-center hover:bg-green-500 hover:text-white"
               >
                 Launch Reader
-                <svg
+                <!-- <svg
                   fill="none"
                   stroke="currentColor"
                   stroke-linecap="round"
@@ -62,10 +62,12 @@
                   stroke-width="2"
                   class="w-4 h-4 ml-2"
                   viewBox="0 0 24 24"
-                >
+                > -->
                   <path d="M5 12h14M12 5l7 7-7 7"></path>
                 </svg>
               </a>
+
+              <a id="clear-button" class="mt-3 ml-3 text-red-500  bg-violet-200 inline-flex items-center hover:bg-red-500 hover:text-white" onclick="clearEditable()">Clear</a>
             </div>
           </div>
         </div>
@@ -97,6 +99,7 @@
       }
 
       document.getElementById("launch-button").onclick = function () {
+        trimContentToLimit();
         handleLaunchImmersiveReader();
       };
 
@@ -142,6 +145,31 @@
           "This is the callback function. It is executed when the Immersive Reader closes."
         );
       }
+
+      function trimContentToLimit() {
+      var editable = document.getElementById('editable');
+      var content = editable.innerText;
+      var wordLimit = 300;
+
+      var words = content.split(/\s+/).length;
+
+      // Replace '\n' with '<br>' to preserve line breaks
+      content = content.replace(/\n/g, '<br>');
+
+      if (words > wordLimit) {
+        // Trim excess words
+        var trimmedContent = content.split(/\s+/).slice(0, wordLimit).join(' ');
+        editable.innerHTML = trimmedContent;
+      }
+
+    }
+
+    function clearEditable() {
+      var editable = document.getElementById('editable');
+      editable.innerHTML = '';
+    }
+
+      
     </script>
   </body>
 </html>

@@ -5,9 +5,11 @@
 /* My styles */
 
 #launch-button,
-#read-more-button {
+#clear-button {
   border-radius: 5px;
   padding: 5px 10px 5px 10px;
+  font-weight: bold;
+  cursor: pointer;
 }
 
 #paragraph {
