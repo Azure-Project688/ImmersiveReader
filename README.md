@@ -29,7 +29,7 @@ It will Provide 4 variables which should be used as environment variables
     - PORT (default 8000 or port for running the app)
 
 ## For Docker platform 
-Copy and paste the below command with your respective environment varaibles
+- Copy and paste the below command with your respective environment varaibles
   `docker run -d \
       -e TENANT_ID=your_tenant_id \
       -e CLIENT_ID=your_client_id \
@@ -39,9 +39,14 @@ Copy and paste the below command with your respective environment varaibles
       -p 8000:8000 \
       memanes688/azureimreader:2.0
   `
-You can also create a `.env `file and then run the following command
+  
+- You can also create a `.env `file and then run the following command
   `docker run -d \
       --env-file .env \
       -p 8000:8000 \
       memanes688/azureimreader:2.0
   `
+
+## PREVIEW
+[![Video](https://img.youtube.com/vi/YOUR_VIDEO_ID/maxresdefault.jpg)](https://www.youtube.com/watch?v=YOUR_VIDEO_ID)
+
