@@ -1,6 +1,7 @@
 const qs = require('qs');
 const axios = require('axios');
 const express = require('express');
+const session = require('express-session');
 const app = express();
 const path = require('path');
 const dotenv = require('dotenv');
@@ -13,6 +14,21 @@ app.set("views", path.join(__dirname, "views"));
 
 app.use("/assets",express.static('assets'));
 app.use(cors());
+
+// Use sessions
+app.use(session({
+  secret: 'kittiGoddd',
+  resave: false,
+  saveUninitialized: true,
+}));
+
+// Initialize launch count if not present
+app.use((req, res, next) => {
+  if (req.session.launchCount === undefined) {
+    req.session.launchCount = 0;
+  }
+  next();
+});
 
 // App listen 
 app.listen(process.env.PORT || 8000, () => {
@@ -67,3 +83,19 @@ app.get('/GetTokenAndSubdomain', function(req, res) {
     }
 });
 
+
+app.get('/getLaunchCount', (req, res) => {
+  // Send the launch count to the client
+  res.json({ launchCount: req.session.launchCount });
+});
+
+app.get('/incrementLaunchCount', (req, res) => {
+  // Increment launch count when the user attempts to launch
+  req.session.launchCount += 1;
+  res.json({ success: true });
+});
+
+app.get('/logout', (req, res) => {
+  req.session.destroy();
+  res.redirect('/');
+});

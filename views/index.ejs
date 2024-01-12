@@ -18,6 +18,7 @@
         <div class="p-4">
           <div
             class="flex border-2 rounded-lg border-gray-200 border-opacity-50 p-8 sm:flex-row flex-col"
+            style="box-shadow: 5px 5px 5px 2px lightgreen"
           >
             <div
               class="w-16 h-16 sm:mr-8 sm:mb-0 mb-4 inline-flex items-center justify-center rounded-full bg-green-100 text-green-500 flex-shrink-0"
@@ -36,14 +37,17 @@
               </svg>
             </div>
             <div class="flex-grow sm:w-full">
-              <h2
-                class="text-gray-900 text-lg title-font font-medium mb-3"
-              >
+              <h2 class="text-gray-900 text-lg title-font font-medium mb-3">
                 Input Window
               </h2>
               <hr class="mb-3" />
-              <input type="text" id="texttitle" placeholder="Enter your title here..." class=" mb-3 shadow appearance-none border rounded w-full sm:max-w-sm py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-              <br>
+              <input
+                type="text"
+                id="texttitle"
+                placeholder="Enter your title here..."
+                class="mb-3 shadow appearance-none border rounded w-full sm:max-w-sm py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              />
+              <br />
               <div
                 class="shadow appearance-none border rounded w-full sm:max-w-sm py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 contenteditable="true"
@@ -52,7 +56,7 @@
 
               <a
                 id="launch-button"
-                class="mt-3 text-green-500 bg-yellow-200 inline-flex items-center hover:bg-green-500 hover:text-white"
+                class="mt-3 text-white bg-blue-500 inline-flex items-center hover:bg-green-500 hover:text-white"
               >
                 Launch Reader
                 <!-- <svg
@@ -63,12 +67,17 @@
                   stroke-width="2"
                   class="w-4 h-4 ml-2"
                   viewBox="0 0 24 24"
-                > -->
+                > 
                   <path d="M5 12h14M12 5l7 7-7 7"></path>
-                </svg>
+                </svg> -->
               </a>
 
-              <a id="clear-button" class="mt-3 ml-3 text-red-500  bg-violet-200 inline-flex items-center hover:bg-red-500 hover:text-white" onclick="clearEditable()">Clear</a>
+              <a
+                id="clear-button"
+                class="mt-3 ml-3 text-red-500 bg-violet-200 inline-flex items-center hover:bg-red-500 hover:text-white"
+                onclick="clearEditable()"
+                >Clear</a
+              >
             </div>
           </div>
         </div>
@@ -101,8 +110,61 @@
 
       document.getElementById("launch-button").onclick = function () {
         trimContentToLimit();
-        handleLaunchImmersiveReader();
+
+        // Check if the user is allowed to launch
+        fetchLaunchCount()
+          .then((launchCount) => {
+            if (launchCount < 3) {
+              incrementLaunchCount(); // Increment launch count on the server
+              handleLaunchImmersiveReader();
+            } else {
+              alert("Launch limit reached.");
+              // Handle the case when the launch limit is reached
+            }
+          })
+          .catch((error) => {
+            console.error("Error fetching launch count:", error);
+            // Handle error (show an error message, redirect, etc.)
+          });
       };
+
+      function fetchLaunchCount() {
+        // Make an AJAX request to the server to fetch the launch count
+        return new Promise((resolve, reject) => {
+          $.ajax({
+            url: "/getLaunchCount",
+            type: "GET",
+            success: function (data) {
+              if (data.launchCount !== undefined) {
+                resolve(data.launchCount);
+              } else {
+                reject("Launch count not available in the response.");
+              }
+            },
+            error: function (err) {
+              reject(err);
+            },
+          });
+        });
+      }
+
+      function incrementLaunchCount() {
+        // Make an AJAX request to the server to increment the launch count
+        $.ajax({
+          url: "/incrementLaunchCount",
+          type: "GET",
+          success: function (data) {
+            if (data.success) {
+              // console.log("Launch count incremented successfully.");
+            } else {
+              console.error("Failed to increment launch count.");
+            }
+          },
+          error: function (err) {
+            console.error("Error incrementing launch count:", err);
+          },
+        });
+      }
 
       function handleLaunchImmersiveReader() {
         getTokenAndSubdomainAsync()
@@ -148,29 +210,29 @@
       }
 
       function trimContentToLimit() {
-      var editable = document.getElementById('editable');
-      var content = editable.innerText;
-      var wordLimit = 300;
+        var editable = document.getElementById("editable");
+        var content = editable.innerText;
+        var wordLimit = 300;
 
-      var words = content.split(/\s+/).length;
+        var words = content.split(/\s+/).length;
 
-      // Replace '\n' with '<br>' to preserve line breaks
-      content = content.replace(/\n/g, '<br>');
+        // Replace '\n' with '<br>' to preserve line breaks
+        content = content.replace(/\n/g, "<br>");
 
-      if (words > wordLimit) {
-        // Trim excess words
-        var trimmedContent = content.split(/\s+/).slice(0, wordLimit).join(' ');
-        editable.innerHTML = trimmedContent;
+        if (words > wordLimit) {
+          // Trim excess words
+          var trimmedContent = content
+            .split(/\s+/)
+            .slice(0, wordLimit)
+            .join(" ");
+          editable.innerHTML = trimmedContent;
+        }
       }
 
-    }
-
-    function clearEditable() {
-      var editable = document.getElementById('editable');
-      editable.innerHTML = '';
-    }
-
-      
+      function clearEditable() {
+        var editable = document.getElementById("editable");
+        editable.innerHTML = "";
+      }
     </script>
   </body>
 </html>
