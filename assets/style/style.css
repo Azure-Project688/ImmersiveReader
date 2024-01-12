@@ -962,6 +962,14 @@ video {
   white-space: pre-wrap;
 }
 
+#texttitle{
+  width: 100%;
+  min-height: 20px;
+  text-wrap: wrap;
+  overflow-y: auto;
+  white-space: pre-wrap;
+}
+
 .profile-img {
   width: 150px;
   height: 150px;
