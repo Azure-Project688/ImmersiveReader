@@ -48,5 +48,5 @@ It will Provide 4 variables which should be used as environment variables
     `
 
 ## PREVIEW
-[![Video](https://img.youtube.com/vi/_PPWWRV6gbA/maxresdefault.jpg)](https://www.youtube.com/watch?v=_PPWWRV6gbA)
+[![Video](https://img.youtube.com/vi/S7CvMkR5s7Q/maxresdefault.jpg)](https://www.youtube.com/watch?v=S7CvMkR5s7Q)
 
